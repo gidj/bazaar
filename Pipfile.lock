@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "156bf357bca9dd710c5ecc21cdcd56265572ce6d94ca0804053b17670ba1821c"
+            "sha256": "bcab799ba285ec1c88b85b086f9169ac09f0a345ed8930870ccbae9d819e9e06"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -118,6 +118,13 @@
             "index": "pypi",
             "version": "==2.12.0"
         },
+        "nameko-redis": {
+            "hashes": [
+                "sha256:6cd534064157a4048ee27ec26877b087298ebbba9b5ae3e217a8a045e9dfb7a2"
+            ],
+            "index": "pypi",
+            "version": "==1.1.0"
+        },
         "path.py": {
             "hashes": [
                 "sha256:9f2169633403aa0423f6ec000e8701dd1819526c62465f5043952f92527fea0f",
@@ -140,6 +147,13 @@
                 "sha256:e23d0cc5299223dcc37885dae624f382297717e459ea24053709675a976a3e19"
             ],
             "version": "==5.1"
+        },
+        "redis": {
+            "hashes": [
+                "sha256:6946b5dca72e86103edc8033019cc3814c031232d339d5f4533b02ea85685175",
+                "sha256:8ca418d2ddca1b1a850afa1680a7d2fd1f3322739271de4b704e0d4668449273"
+            ],
+            "version": "==3.2.1"
         },
         "requests": {
             "hashes": [
