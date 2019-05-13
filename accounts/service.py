@@ -1,10 +1,11 @@
+import uuid
+
 from nameko.rpc import rpc
 from nameko_redis import Redis
-import uuid
 
 
 class AccountService:
-    name = 'account_service'
+    name = 'accounts'
 
     redis = Redis('development')
 
@@ -19,7 +20,7 @@ class AccountService:
 
     @rpc
     def create(self, email_address):
-        assert(email_address)
+        assert (email_address)
 
         data = self._schema(email_address=email_address)
 

@@ -4,7 +4,7 @@ from nameko_redis import Redis
 import uuid
 
 class AddressService:
-    name = 'address_service'
+    name = 'addresses'
 
     redis = Redis('development')
 
