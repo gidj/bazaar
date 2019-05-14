@@ -13,17 +13,7 @@ class GatewayService:
     addresses_rpc = RpcProxy('addresses')
     accounts_rpc = RpcProxy('accounts')
 
-    @http('GET', '/addresses/<string:address_id>')
-    def get_address(self, request, address_id):
-        address = self.addresses_rpc.get(address_id)
-        return json.dumps({'address': address})
-
-    @http('POST', '/addresses')
-    def post_address(self, request):
-        data = json.loads(request.get_data(as_text=True))
-        address_id = self.addresses_rpc.create(**data)
-        return json.dumps({'address': {'id': address_id}})
-
+    # Accounts stuff
     @http('GET', '/accounts/<string:account_id>')
     def get_account(self, request, account_id):
         account = self.accounts_rpc.get(account_id)
@@ -37,3 +27,16 @@ class GatewayService:
         self.logger.info(data)
         account_id = self.accounts_rpc.create(**data)
         return json.dumps({'account': {'id': account_id}})
+
+    # Addresses stuff
+    @http('GET', '/addresses/<string:address_id>')
+    def get_address(self, request, address_id):
+        address = self.addresses_rpc.get(address_id)
+        return json.dumps({'address': address})
+
+    @http('POST', '/addresses')
+    def post_address(self, request):
+        data = json.loads(request.get_data(as_text=True))
+        address_id = self.addresses_rpc.create(**data)
+        return json.dumps({'address': {'id': address_id}})
+
