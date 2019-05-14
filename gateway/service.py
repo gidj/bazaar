@@ -7,7 +7,7 @@ import logging
 
 
 class GatewayService:
-    logger = logging.getLogger(__class__.name)
+    logger = logging.getLogger(__name__)
     name = 'gateway'
 
     addresses_rpc = RpcProxy('addresses')
@@ -25,13 +25,13 @@ class GatewayService:
         return address_id
 
     @http('GET', '/accounts/<string:account_id>')
-    def get_account(self, request, account):
-        account = self.accounts_rpc.get(account)
+    def get_account(self, request, account_id):
+        account = self.accounts_rpc.get(account_id)
         return json.dumps({'account': account})
 
     @http('POST', '/accounts')
     def post_account(self, request):
         data = json.loads(request.get_data(as_text=True))
         self.logger.info(data)
-        account_id = self.accounts_rpc.create(data['account'])
-        return account_id
+        account_id = self.accounts_rpc.create(**data)
+        return json.dumps({'account': {'account_id': account_id}})
