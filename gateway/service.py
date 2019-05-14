@@ -3,8 +3,11 @@ import json
 from nameko.rpc import RpcProxy
 from nameko.web.handlers import http
 
+import logging
+
 
 class GatewayService:
+    logger = logging.getLogger(__class__.name)
     name = 'gateway'
 
     addresses_rpc = RpcProxy('addresses')
@@ -23,11 +26,12 @@ class GatewayService:
 
     @http('GET', '/accounts/<string:account_id>')
     def get_account(self, request, account):
-        account = self.account.get(account)
+        account = self.accounts_rpc.get(account)
         return json.dumps({'account': account})
 
     @http('POST', '/accounts')
     def post_account(self, request):
         data = json.loads(request.get_data(as_text=True))
-        account = self.account.create(data['account'])
-        return account
+        self.logger.info(data)
+        account_id = self.accounts_rpc.create(data['account'])
+        return account_id
