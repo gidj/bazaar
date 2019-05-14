@@ -1,6 +1,6 @@
 import json
 
-from namkeo.rpc import RpcProxy
+from nameko.rpc import RpcProxy
 from nameko.web.handlers import http
 
 
