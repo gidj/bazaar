@@ -11,6 +11,7 @@ class AccountService:
 
     def _schema(self, **kwargs):
         return {
+            'id': uuid.uuid4().hex,
             'email_address': kwargs.get('email_address', None),
             'first_name': kwargs.get('first_name', None),
             'last_name': kwargs.get('last_name', None),
@@ -21,13 +22,9 @@ class AccountService:
     @rpc
     def create(self, email_address):
         assert (email_address)
-
         data = self._schema(email_address=email_address)
-
-        account_id = uuid.uuid4().hex
-        self.redis.set(account_id, data)
-
-        return account_id
+        self.redis.set(data.get('id'), data)
+        return data.get('id')
 
     @rpc
     def get(self, account_id):

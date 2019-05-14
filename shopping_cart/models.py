@@ -1,3 +1,6 @@
+from typing import Dict
+
+
 class ShoppingCart:
     def __init__(self, account_id, listings=None):
         assert(account_id)
@@ -21,7 +24,7 @@ class ShoppingCart:
         }
 
     @classmethod
-    def from_dict(cls, data_dict: dict):
+    def from_dict(cls, data_dict: Dict):
         account_id = data_dict.get('account_id')
         listings = data_dict.get('listings', [])
         return cls(account_id, listings=listings)

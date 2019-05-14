@@ -3,6 +3,7 @@ from nameko_redis import Redis
 
 import uuid
 
+
 class AddressService:
     name = 'addresses'
 
@@ -10,6 +11,7 @@ class AddressService:
 
     def _schema(self, **kwargs):
         return {
+            'id': uuid.uuid4().hex,
             'street_1': kwargs.get('street_1', None),
             'street_2': kwargs.get('street_2', None),
             'city': kwargs.get('city', None),
@@ -20,8 +22,6 @@ class AddressService:
 
     @rpc
     def create(self, street_1, street_2, city, province, postal_code, country):
-        address_id = uuid.uuid4().hex
-
         data = self._schema(
             street_1=street_1,
             street_2=street_2,
@@ -31,8 +31,8 @@ class AddressService:
             country=country,
         )
 
-        self.redis.set(address_id, data)
-        return address_id
+        self.redis.set(data.get('id'), data)
+        return data.get('id')
 
     @rpc
     def get(self, address_id):
