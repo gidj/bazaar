@@ -2,16 +2,18 @@ from nameko.rpc import rpc
 from nameko_redis import Redis
 
 import uuid
+import logging
 
 
 class AddressService:
+    logger = logging.getLogger(__name__)
     name = 'addresses'
 
     redis = Redis('development')
 
     def _schema(self, **kwargs):
-        return {
-            'id': uuid.uuid4().hex,
+        _data = {
+            'id': kwargs.get('id', uuid.uuid4().hex),
             'street_1': kwargs.get('street_1', None),
             'street_2': kwargs.get('street_2', None),
             'city': kwargs.get('city', None),
@@ -20,21 +22,16 @@ class AddressService:
             'country': kwargs.get('country', None),
         }
 
-    @rpc
-    def create(self, street_1, street_2, city, province, postal_code, country):
-        data = self._schema(
-            street_1=street_1,
-            street_2=street_2,
-            city=city,
-            province=province,
-            postal_code=postal_code,
-            country=country,
-        )
+        return dict((k, v) for k, v in _data.items() if v is not None)
 
-        self.redis.set(data.get('id'), data)
+    @rpc
+    def create(self, **kwargs):
+        data = self._schema(**kwargs)
+        self.redis.hmset(data.get('id'), data)
         return data.get('id')
 
     @rpc
     def get(self, address_id):
-        address = self.redis.get(address_id)
+        self.logger.info(address_id)
+        address = self.redis.hgetall(address_id)
         return address

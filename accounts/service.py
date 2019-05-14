@@ -1,9 +1,8 @@
+import logging
 import uuid
 
 from nameko.rpc import rpc
 from nameko_redis import Redis
-
-import logging
 
 
 class AccountService:
@@ -14,7 +13,7 @@ class AccountService:
 
     def _schema(self, **kwargs):
         _data = {
-            'id': uuid.uuid4().hex,
+            'id': kwargs.get('id', uuid.uuid4().hex),
             'email_address': kwargs.get('email_address', None),
             'first_name': kwargs.get('first_name', None),
             'last_name': kwargs.get('last_name', None),
@@ -26,7 +25,7 @@ class AccountService:
 
     @rpc
     def create(self, **kwargs):
-        assert(kwargs.get('email_address', None))
+        assert (kwargs.get('email_address', None))
         data = self._schema(**kwargs)
         self.redis.hmset(data.get('id'), data)
         return data.get('id')
