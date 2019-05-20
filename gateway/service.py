@@ -12,6 +12,7 @@ class GatewayService:
 
     addresses_rpc = RpcProxy('addresses')
     accounts_rpc = RpcProxy('accounts')
+    listings_rpc = RpcProxy('listings')
 
     # Accounts stuff
     @http('GET', '/accounts/<string:account_id>')
@@ -40,3 +41,15 @@ class GatewayService:
         address_id = self.addresses_rpc.create(**data)
         return json.dumps({'address': {'id': address_id}})
 
+    # Listing stuff
+    @http('GET', '/listings/<string:listing_id>')
+    def get_listing(self, request, listing_id):
+        listing = self.listings_rpc.get(listing_id)
+        self.logger.info(listing)
+        return json.dumps({'listing': listing})
+
+    @http('POST', '/listings')
+    def post_listing(self, request):
+        data = json.loads(request.get_data(as_text=True))
+        listing_id = self.listings_rpc.create(**data)
+        return json.dumps({'listing': {'id': listing_id}})
