@@ -46,4 +46,3 @@ class ListingService:
     def _write_data(self, listing_id, data):
         self.redis.hmset(listing_id, data)
         return listing_id
-
