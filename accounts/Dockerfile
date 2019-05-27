@@ -5,11 +5,12 @@ run apt-get update && apt-get -y install netcat && apt-get clean
 WORKDIR /app
 
 COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
 
 COPY config.yml ./
 COPY run.sh ./
-COPY service.py ./
+
+COPY accounts ./accounts
 
 RUN chmod +x ./run.sh
 
