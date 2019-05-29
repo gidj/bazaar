@@ -1,7 +1,12 @@
+import logging
+from typing import Dict
+
 import pytest
 from mock import Mock
 
-from accounts.depedencies import REDIS_URI_KEY, Storage, NotFoundException
+from accounts.depedencies import REDIS_URI_KEY, NotFoundException, Storage
+
+logger = logging.getLogger(__name__)
 
 
 @pytest.fixture
@@ -25,7 +30,43 @@ def storage(config):
     return provider.get_dependency({})
 
 
+@pytest.fixture
+def account() -> Dict:
+    return {
+        'id': '',
+        'email_address': 'jon.doe@nowhere.net',
+        'first_name': 'Jon',
+        'last_name': 'Doe',
+        'billing_address_id': '',
+        'shipping_address_id': '',
+    }
+
+
+@pytest.fixture
+def create_account(account):
+    def create(**updates):
+        _account = account.copy()
+        _account.update(updates)
+        return _account
+
+    return create
+
+
 def test_get_fails_on_not_found(storage):
     with pytest.raises(NotFoundException) as exception:
         storage.get("1")
     assert "Account ID 1 does not exist" == exception.value.args[0]
+
+
+def test_create_account(storage, account):
+    account_id = storage.create(account)
+    logger.info(account_id)
+    assert account_id is not None
+
+
+def test_create_account_without_email_raises_error(storage, account):
+    account = dict(account)
+    del account['email_address']
+    with pytest.raises(AssertionError) as error:
+        storage.create(account)
+    assert error.errisinstance(AssertionError)
