@@ -10,7 +10,7 @@ class NotFoundException(Exception):
     pass
 
 
-REDIS_URIS_KEY = 'REDIS_URIS'
+REDIS_URI_KEY = 'REDIS_URIS'
 
 
 class RedisWrapper:
@@ -61,7 +61,7 @@ class Storage(DependencyProvider):
         self.options.update(options)
 
     def setup(self):
-        redis_uris = self.container.config[REDIS_URIS_KEY]
+        redis_uris = self.container.config[REDIS_URI_KEY]
         self.redis_uri = redis_uris[self.key]
 
     def start(self):
