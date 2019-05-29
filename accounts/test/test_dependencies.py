@@ -60,7 +60,6 @@ def test_get_fails_on_not_found(storage):
 
 def test_create_account(storage, account):
     account_id = storage.create(account)
-    logger.info(account_id)
     assert account_id is not None
 
 
@@ -70,3 +69,11 @@ def test_create_account_without_email_raises_error(storage, account):
     with pytest.raises(AssertionError) as error:
         storage.create(account)
     assert error.errisinstance(AssertionError)
+
+
+def test_create_and_update_account(storage, account):
+    account_id = storage.create(account)
+    account.update({'first_name': 'John'})
+    _account = storage.update(account_id, account)
+    assert _account.get('first_name') == 'John'
+
