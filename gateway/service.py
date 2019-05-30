@@ -26,7 +26,7 @@ class GatewayService:
     def post_account(self, request):
         data = json.loads(request.get_data(as_text=True))
         self.logger.info(data)
-        account_id = self.accounts_rpc.create(**data)
+        account_id = self.accounts_rpc.create(data)
         return json.dumps({'account': {'id': account_id}})
 
     # Addresses stuff
