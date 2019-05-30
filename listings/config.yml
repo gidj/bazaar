@@ -7,7 +7,7 @@ LOGGING:
     disable_existing_loggers: False
     formatters:
         default:
-            format: "%(asctime)-15s [%(levelname)-4s] [accounts] [%(name)-12s] %(message)s"
+            format: "%(asctime)-15s [%(levelname)-4s] [listings] [%(name)-12s] %(message)s"
     handlers:
         default:
             level: INFO
