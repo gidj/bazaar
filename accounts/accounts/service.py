@@ -21,3 +21,7 @@ class AccountService:
     @rpc
     def get(self, account_id):
         return self.storage.get(account_id)
+
+    @rpc
+    def update(self, account_id, data: Dict):
+        return self.storage.update(account_id)

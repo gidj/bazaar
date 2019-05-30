@@ -37,7 +37,7 @@ class RedisWrapper:
 
 
     def _write(self, _id: str, data_dict: Dict):
-        d = self.redis.hmset(self._format_key(_id), data_dict)
+        d = self.redis.hmset(self._format_key(_id), self._schema(data_dict))
         self.logger.info(d)
 
     def create(self, data: Dict) -> AnyStr:
