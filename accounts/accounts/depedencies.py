@@ -5,12 +5,9 @@ from typing import AnyStr, Dict
 from nameko.extensions import DependencyProvider
 from redis import StrictRedis as _StrictRedis
 
+from accounts.exceptions import NotFoundException
 
-class NotFoundException(Exception):
-    pass
-
-
-REDIS_URI_KEY = 'REDIS_URIS'
+REDIS_URI_KEY = "REDIS_URIS"
 
 
 class RedisWrapper:
@@ -27,31 +24,29 @@ class RedisWrapper:
 
     def _schema(self, data_dict: Dict) -> Dict:
         return {
-            'id': data_dict.get('id'),
-            'email_address': data_dict.get('email_address'),
-            'first_name': data_dict.get('first_name', None),
-            'last_name': data_dict.get('last_name', None),
-            'billing_address_id': data_dict.get('billing_address_id', None),
-            'shipping_address_id': data_dict.get('shipping_address_id', None),
+            "id": data_dict.get("id"),
+            "email_address": data_dict.get("email_address"),
+            "first_name": data_dict.get("first_name", None),
+            "last_name": data_dict.get("last_name", None),
+            "billing_address_id": data_dict.get("billing_address_id", None),
+            "shipping_address_id": data_dict.get("shipping_address_id", None),
         }
-
 
     def _write(self, _id: str, data_dict: Dict):
         d = self.redis.hmset(self._format_key(_id), self._schema(data_dict))
         self.logger.info(d)
 
     def create(self, data: Dict) -> AnyStr:
-        assert (data.get('email_address', None))
+        assert data.get("email_address", None)
         _id = self._generate_id()
-        data['id'] = _id
+        data["id"] = _id
         self._write(_id, data)
         return _id
 
     def get(self, account_id: AnyStr) -> Dict:
         account = self.redis.hgetall(self._format_key(account_id))
         if not account:
-            raise NotFoundException(
-                "Account ID {} does not exist".format(account_id))
+            raise NotFoundException("Account ID {} does not exist".format(account_id))
         else:
             return self._schema(account)
 
@@ -63,12 +58,10 @@ class RedisWrapper:
 
 
 class Storage(DependencyProvider):
-    def __init__(self, key='development', **options):
+    def __init__(self, key="development", **options):
         self.key = key
         self.client = None
-        self.options = {
-            'decode_responses': True,
-        }
+        self.options = {"decode_responses": True}
         self.options.update(options)
 
     def setup(self):
