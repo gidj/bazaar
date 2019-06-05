@@ -10,4 +10,4 @@ until nc -z ${REDIS_HOST} ${REDIS_PORT}; do
     sleep 1
 done
 
-nameko run --config config.yml service
+nameko run --config config.yml listings.service
