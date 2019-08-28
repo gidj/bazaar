@@ -25,3 +25,4 @@ class AccountService:
     @rpc
     def update(self, account_id, data: Dict):
         return self.storage.update(account_id)
+
